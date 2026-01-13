@@ -10,9 +10,15 @@ requires-python = ">=3.12"
 dependencies = [
     "advanced-alchemy",
     "fastapi",
+    "fastapi-cli>=0.0.20",
+    "msgspec",
     "structlog",
     "typer",
 ]
+
+[project.scripts]
+app = "atfirst.__init__:entrypoint"
+atfirst = "atfirst.__init__:entrypoint"
 
 [build-system]
 requires = ["hatchling"]
@@ -157,7 +163,7 @@ docstring-code-format = true
 docstring-code-line-length = 88
 
 [tool.mypy]
-packages = ["kortex", "tests"]
+packages = ["atfirst", "tests"]
 strict = true
 disallow_any_generics = false
 implicit_reexport = false
