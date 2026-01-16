@@ -9,9 +9,11 @@ authors = [
 requires-python = ">=3.12"
 dependencies = [
     "advanced-alchemy",
+    "docstring-parser",
     "fastapi",
-    "fastapi-cli>=0.0.20",
+    "fastapi-cli",
     "msgspec",
+    "openai",
     "structlog",
     "typer",
 ]
@@ -118,6 +120,7 @@ ignore = [
   "RUF012",  # Ruff-specific rule - annotated with classvar
   "ISC001",  # Ruff formatter incompatible
   "CPY001",  # ruff - copyright notice at the top of the file
+  "PLC0414", # pylint - missing module docstring
 ]
 
 [tool.ruff.lint.pydocstyle]

@@ -210,6 +210,13 @@ class OpenaiProviderConfig(BaseSchema):
     attempt: int = Field(default=1)
     models: list[_Model] = Field(default_factory=list)
 
+    def get_model(self, type: Literal["textual", "visual", "embedding"]) -> _Model:  # noqa: A002
+        for model in self.models:
+            if model.type == type:
+                return model
+
+        raise ValueError(f"Model not found: {type}")
+
 
 class Config(BaseSchema):
     """Config for atfirst application"""
@@ -229,7 +236,7 @@ class Config(BaseSchema):
         raise ValueError(f"OpenAI service provider not found: {name}")
 
     @classmethod
-    def load_file(cls, filename: str = "config.yaml") -> Self:
+    def load(cls, filename: str = "config.yaml") -> Self:
         if not (filepath := ROOT_DIR / filename).exists():
             logger.warning("Cannot find config file", filename=filename)
             return cls()  # Default configurations.
@@ -257,5 +264,5 @@ class Config(BaseSchema):
         if cls._instance:
             return cls._instance
 
-        cls._instance = cls.load_file(filename)
+        cls._instance = cls.load(filename)
         return cls._instance
