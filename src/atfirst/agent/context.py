@@ -4,12 +4,12 @@ from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Self
 
-from .toolcall import wrap
+from .tool import wrap
 
 if TYPE_CHECKING:
     from .message import Message
     from .openai import MessageParam, ToolAnnotation
-    from .toolcall import ToolWrapper
+    from .tool import ToolWrapper
 
 
 __all__ = ("Context",)
@@ -95,7 +95,7 @@ class Context:
     def add_tool(self, *tool: "ToolWrapper") -> None:
         for t in tool:
             if t.name in self._tools:
-                raise ValueError(f"Tool `{t.name}` already exists")
+                raise ValueError(f"Tool `{t.name}` duplicated")
 
             self._tools[t.name] = t
 
