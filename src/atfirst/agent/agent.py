@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from pydantic import BaseModel
 
     from .model import Model
-    from .toolcall import ToolWrapper
+    from .tool import ToolWrapper
 
 
 __all__ = ("Agent",)
@@ -132,7 +132,7 @@ class Agent:
             Message(role="assistant", content_type="text", text=answer.text),
         )
 
-        await self.model.aresponse(ctx, output_schema=self.output_schema)
+        await self.model.aresponse(ctx, self.output_schema)
         if (output := _format(ctx.get_last_message().text)) is None:
             return None
 
