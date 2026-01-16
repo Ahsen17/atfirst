@@ -1,0 +1,28 @@
+{% if description %}
+<system_role>
+{{ description }}
+</system_role>
+{% endif %}
+
+{% if tools %}
+<tools>
+{% for tool in tools %}
+  <tool>
+    <name>{{ tool.name }}</name>
+    <description>
+      {{ tool.description }}
+    </description>
+  </tool>
+{% endfor %}
+</tools>
+{% endif %}
+
+{% if instruction %}
+<instruction>
+{{ instruction }}
+</instruction>
+{% endif %}
+
+<attention>
+  - Call `terminate` tool if you ensure all requests are finished.
+</attention>
