@@ -6,7 +6,7 @@ from msgspec import json
 
 from .context import Context
 from .message import Message
-from .util import Jinja2Renderer
+from .renderer import Jinja2Renderer
 
 if TYPE_CHECKING:
     from pydantic import BaseModel
@@ -79,7 +79,7 @@ class Agent:
                 # Execute tool function
                 try:
                     result = tool.function(**json.decode(tool_args, type=dict[str, Any]))
-                    tool_msg = await result if isinstance(result, Awaitable) else result
+                    tool_msg = await result if isinstance(result, Awaitable) else result  # type: ignore
 
                 except Exception as e:  # noqa: BLE001
                     tool_msg = f"Error executing tool {tool_name}: {e!s}."

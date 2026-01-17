@@ -1,3 +1,4 @@
+from . import bm25, renderer, vector
 from .agent import Agent
 from .context import Context
 from .message import Message
@@ -10,5 +11,8 @@ __all__ = (
     "Message",
     "Model",
     "ToolWrapper",
+    "bm25",
+    "renderer",
+    "vector",
     "wrap",
 )

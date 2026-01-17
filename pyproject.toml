@@ -12,9 +12,11 @@ dependencies = [
     "docstring-parser",
     "fastapi",
     "fastapi-cli",
+    "fastembed",
+    "jieba",
     "msgspec",
     "openai",
-    "qdrant-client>=1.16.2",
+    "qdrant-client>=1.16",
     "structlog",
     "typer",
 ]

@@ -82,9 +82,9 @@ def wrap(
         type_name = TYPE_MAPPING[param.type_name]
 
         if "None" not in type_name:
-            parameters["required"].append(param.arg_name)  # type: ignore
+            parameters["required"].append(param.arg_name)
 
-        parameters["properties"][param.arg_name] = {  # type: ignore
+        parameters["properties"][param.arg_name] = {
             "type": type_name,
             "description": param.description,
         }
