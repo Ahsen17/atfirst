@@ -1,11 +1,11 @@
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from docstring_parser import Docstring, parse
 
 if TYPE_CHECKING:
-    from .openai import ToolAnnotation
+    from ._openai import ToolAnnotation
 
 
 __all__ = (
@@ -69,7 +69,7 @@ def wrap(
     ):
         raise ValueError("Function tool must have full annotated docstring.")
 
-    parameters = {
+    parameters: dict[str, Any] = {
         "type": "object",
         "properties": {},
         "required": [],
@@ -84,7 +84,7 @@ def wrap(
         if "None" not in type_name:
             parameters["required"].append(param.arg_name)  # type: ignore
 
-        parameters["properties"][param.arg_name] = {
+        parameters["properties"][param.arg_name] = {  # type: ignore
             "type": type_name,
             "description": param.description,
         }
