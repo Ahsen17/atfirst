@@ -8,7 +8,7 @@ from pydantic import BaseModel
 __all__ = ("Jinja2Renderer",)
 
 
-HERE: Final[Path] = Path(__file__).parent.resolve()
+HERE: Final[Path] = Path(__file__).parent.parent.resolve()
 
 
 class Jinja2Renderer:
