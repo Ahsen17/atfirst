@@ -7,8 +7,8 @@ from typing import TYPE_CHECKING, Self
 from .tool import wrap
 
 if TYPE_CHECKING:
+    from ._openai import MessageParam, ToolAnnotation
     from .message import Message
-    from .openai import MessageParam, ToolAnnotation
     from .tool import ToolWrapper
 
 

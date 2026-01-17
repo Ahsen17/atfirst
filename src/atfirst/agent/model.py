@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING
 
 from pydantic import BaseModel
 
+from ._openai import AsyncOpenAI, omit
 from .message import Message
-from .openai import AsyncOpenAI, BadRequestError, omit
 
 if TYPE_CHECKING:
     from .context import Context
@@ -30,7 +30,7 @@ class Model:
     timeout: float | None = field(default=None)
 
     def __post_init__(self) -> None:
-        if self.api_key is None:
+        if not self.api_key:
             self.api_key = os.getenv("OPENAI_API_KEY", "not-provided")
 
         if self.attempt is None:
@@ -45,29 +45,34 @@ class Model:
             max_retries=(self.attempt or 1) - 1,
         )
 
+    async def aembed(self, input: str | list[str]) -> list[list[float]]:  # noqa: A002
+        response = await self.aclient.embeddings.create(
+            model=self.id,
+            input=input,
+        )
+
+        return [embedding.embedding for embedding in response.data]
+
     async def aresponse(
         self,
         ctx: "Context",
         output_schema: type[BaseModel] | None = None,
     ) -> None:
-        try:
-            completion = await self.aclient.chat.completions.create(
-                model=self.id,
-                messages=ctx.build_message(),
-                tools=ctx.list_tool_annotation(),
-                logit_bias=self.logitbias if self.logitbias is not None else omit,
-                top_p=self.top_p if self.top_p is not None else omit,
-                temperature=self.temperature if self.temperature is not None else omit,
-                max_tokens=self.max_tokens if self.max_tokens is not None else omit,
-                response_format={
-                    # TODO: deepseek openai api special json output schema
-                    "type": "json_object",
-                }
-                if output_schema
-                else omit,
-                stream=False,
-            )
-        except BadRequestError as e:
-            raise e
+        completion = await self.aclient.chat.completions.create(
+            model=self.id,
+            messages=ctx.build_message(),
+            tools=ctx.list_tool_annotation(),
+            logit_bias=self.logitbias if self.logitbias is not None else omit,
+            top_p=self.top_p if self.top_p is not None else omit,
+            temperature=self.temperature if self.temperature is not None else omit,
+            max_tokens=self.max_tokens if self.max_tokens is not None else omit,
+            response_format={
+                # TODO: deepseek openai api special json output schema
+                "type": "json_object",
+            }
+            if output_schema
+            else omit,
+            stream=False,
+        )
 
         ctx.add_message(Message.from_completion(completion))

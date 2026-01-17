@@ -2,10 +2,10 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Literal, Self
 from uuid import uuid4
 
-from .openai import ToolCall
+from ._openai import ToolCall
 
 if TYPE_CHECKING:
-    from .openai import ChatCompletion, MessageParam, ToolCallParam
+    from ._openai import ChatCompletion, MessageParam, ToolCallParam
 
 
 __all__ = ("Message",)
@@ -37,7 +37,7 @@ class Message:
                         "arguments": tool_call.function.arguments,
                     },
                 }
-                for tool_call in completion.choices[0].message.tool_calls or []  # type: ignore
+                for tool_call in completion.choices[0].message.tool_calls or []
                 if isinstance(tool_call, ToolCall)
             ],
         )

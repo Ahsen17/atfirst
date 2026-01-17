@@ -57,6 +57,8 @@ class Agent:
                 messages = [input]
             case list():
                 messages = input
+            case _:
+                raise TypeError("Invalid input type")
 
         self.ctx.add_message(*messages)
 
